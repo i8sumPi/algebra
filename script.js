@@ -166,6 +166,10 @@ function multiplyDivide(equation){
 				rParts[j].nums = percise(rParts[j].nums*mulBy);
 			}
 		}else{
+			if(splitExp(parts[i]).length > 1){
+				//exponent
+				parts[i] = "("+exponent(parts[i])+")"; //see the exponent function
+			}
 			if(isParenth(parts[i])){
 				justExponent = false;
 				var nextPart = simplify(parts[i].slice(1,-1));
@@ -198,12 +202,6 @@ function multiplyDivide(equation){
 					}
 				}
 				rParts = newRParts;
-			}else if(splitExp(parts[i]).length > 1){
-				//exponent
-				parts[i] = exponent(parts[i]); //see the exponent function
-				for (var j = 0; j < rParts.length; j++) {
-					rParts[j].vars.push(parts[i]); //multiply each by the result.
-				}
 			}else{
 				justExponent = false;
 				//it is a variable
