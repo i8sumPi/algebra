@@ -235,6 +235,11 @@ function multiplyDivide(equation){
 }
 
 function exponent(equation){
+	var isNeg = false;
+	if(equation[0] == "-"){
+		equation = equation.slice(1);
+		isNeg = true;
+	}
 	var parts = splitExp(equation); //split by "^" (it is a list)
 	var i = parts.length-1; //i starts at the end
 	while (i > 0) { //repeat as long as it isn't the first in the list of parts
@@ -253,6 +258,9 @@ function exponent(equation){
 			parts.pop();
 		}
 		i--;
+	}
+	if(isNeg){
+		return "-"+parts[i];
 	}
 	return parts[0];
 }
@@ -337,7 +345,7 @@ function splitAddSub(equation){
 				addOrSub.push("+");
 			}else if(equation[i] == "+" && equation[i+1] == "-"){//it is _+-_
 				equation = equation.slice(0,i)+equation.slice(i+1);
-			}else if(equation[i] == "-"){//it is _-_
+			}else if(equation[i] == "-" && equation[i-1] != "*"){//it is _-_, but not _*-_
 				if(equation.slice(0,i) == ""){
 					addOrSub.pop();
 					addOrSub.push("-");
