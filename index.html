@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Algebra Expression Simplifier</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="favicon.png" type="image/png">
+	<script type="text/javascript" src="script.js"></script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-167430586-1"></script><script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","UA-167430586-1");</script>
+<style type="text/css">
+#input{
+	padding: 5px;
+	border: 1px solid #bbb;
+	margin: 0;
+	font-size: 14px;
+	min-width: 20ch;
+}
+#done{
+	padding: 5px;
+	height: 80%;
+	border: 1px solid #bbb;
+	background-color: #def;
+	font-size: 12px;
+	border-left: none;
+	outline: none;
+}
+#done:active{
+	background-color: #bdf;
+}
+#input:focus{
+	border: 1px solid #888;
+	outline: none;
+}
+#inputArea{
+	display: flex;
+  	flex-flow: row wrap;
+  	align-items: center;
+}
+h1, body{
+	font-family: sans-serif;
+}
+#ansDiv{
+	border: 1px solid #bbb;
+	padding: 5px;
+	display: none;
+}
+.typeOf{
+	padding: 3px;
+	border-radius: 2px;
+	background-color: #ddd;
+}
+.step{
+	margin-bottom: 10px;
+	white-space: nowrap;
+}
+</style>
+</head>
+<body>
+	<h1>Algebra Expression Simplifier</h1>
+	Created by Kira L<br><br>
+	This algebra expression simplifier was made entirely with JavaScript, HTML, and CSS from scratch. It also handles equations by turning them into expressions and saves your work as you go. I hope this can be helpful to solve your math expressions and equations! <br>
+	For more info, check out the GitHub repo <a href="https://github.com/i8sumPi/algebra">here</a>. It supports addition, subtraction, division (by numbers only), multiplication, and exponents. 
+	<br><br>
+	<div id="inputArea">
+		<input id="input" value="" placeholder="enter equation here" autocomplete="off" onchange="run()">
+		<input type="button" id="done" value="&check;">
+	</div><br>
+	<div id="stepsDiv"></div>
+	<div id="ansDiv"></div>
+	<script type="text/javascript">
+var input = document.getElementById("input");
+var stepsDiv = document.getElementById("stepsDiv");
+var ansDiv = document.getElementById("ansDiv");
+var button = document.getElementById("done");//alert("(a^3 − a^2 + 1)(b^3 − b^2 + 2)");
+if(!localStorage.getItem("lastEquation")){
+	localStorage.setItem("lastEquation","(x + y)(x^2 - xy + y^2)");
+}
+button.value += " (or press enter)";
+
+input.value = localStorage.getItem("lastEquation");
+input.style.width = (input.value.length+1) + "ch";
+
+input.oninput = ()=>{
+	localStorage.setItem("lastEquation",input.value);
+	if(input.value == ""){
+		input.style.width = "19ch";
+	}else{
+		input.style.width = (input.value.length) + "ch";
+	}
+}
+button.onclick = run;
+
+function run(){
+	ansDiv.style.display = "none";
+	stepsDiv.innerHTML = "<span class='typeOf'>calculating...</span>"
+	document.body.style.cursor = "progress";
+	button.style.cursor = "progress";
+	input.style.cursor = "progress";
+	setTimeout(()=>{
+		ansDiv.style.display = "inline-block";	
+		document.body.style.cursor = "auto";
+		button.style.cursor = "auto";
+		input.style.cursor = "auto";
+		var res = doAll(input.value);
+		var steps = [];
+		for(var i = 0; i<res.steps.length; i++){
+			steps.push("<span class='typeOf'>"+res.steps[i][0]+"</span> "+res.steps[i][1]);
+		}
+		stepsDiv.innerHTML = "<div class='step'>"+steps.join("</div><div class='step'>")+"</div>";
+		ansDiv.innerHTML = res.ans;
+	}, Math.random()*50*input.value.length+700);
+}
+
+	</script>
+</body>
+</html>
